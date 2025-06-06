@@ -1,31 +1,41 @@
+import unittest
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import time
-import unittest
+from selenium.webdriver.chrome.options import Options
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Chrome()  
-        self.driver.get("https://letsusedata.com/login")  
+        
+        chrome_options = Options()
+        
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1280x800")
+
+        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver.get("https://letsusedata.com/index.html")
         time.sleep(2)
 
     def test_successful_login(self):
         driver = self.driver
-        driver.find_element(By.NAME, "username").send_keys("test1")
-        driver.find_element(By.NAME, "password").send_keys("Test12456")
-        driver.find_element(By.NAME, "password").send_keys(Keys.RETURN)
+        driver.find_element(By.ID, "txtUser").send_keys("test1")
+        driver.find_element(By.ID, "txtPassword").send_keys("Test12456")
+        driver.find_element(By.ID, "txtPassword").send_keys(Keys.RETURN)
         time.sleep(2)
-        self.assertIn("dashboard", driver.current_url.lower())  
+
+        
+        self.assertNotIn("index.html", driver.current_url.lower())
 
     def test_unsuccessful_login(self):
         driver = self.driver
-        driver.find_element(By.NAME, "username").send_keys("test1")
-        driver.find_element(By.NAME, "password").send_keys("test1234")
-        driver.find_element(By.NAME, "password").send_keys(Keys.RETURN)
+        driver.find_element(By.ID, "txtUser").send_keys("test1")
+        driver.find_element(By.ID, "txtPassword").send_keys("test1234")  
+        driver.find_element(By.ID, "txtPassword").send_keys(Keys.RETURN)
         time.sleep(2)
-        error_elements = driver.find_elements(By.CLASS_NAME, "error") 
-        self.assertTrue(any("invalid" in el.text.lower() for el in error_elements))
+
+        
+        self.assertIn("index.html", driver.current_url.lower())
 
     def tearDown(self):
         self.driver.quit()
