@@ -6,8 +6,8 @@ import unittest
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Chrome()  # Or Firefox, Edge, etc.
-        self.driver.get("https://letsusedata.com/login")  # Adjust URL if needed
+        self.driver = webdriver.Chrome()  
+        self.driver.get("https://letsusedata.com/login")  
         time.sleep(2)
 
     def test_successful_login(self):
@@ -16,7 +16,7 @@ class TestLogin(unittest.TestCase):
         driver.find_element(By.NAME, "password").send_keys("Test12456")
         driver.find_element(By.NAME, "password").send_keys(Keys.RETURN)
         time.sleep(2)
-        self.assertIn("dashboard", driver.current_url.lower())  # Adjust if dashboard URL changes
+        self.assertIn("dashboard", driver.current_url.lower())  
 
     def test_unsuccessful_login(self):
         driver = self.driver
@@ -24,7 +24,7 @@ class TestLogin(unittest.TestCase):
         driver.find_element(By.NAME, "password").send_keys("test1234")
         driver.find_element(By.NAME, "password").send_keys(Keys.RETURN)
         time.sleep(2)
-        error_elements = driver.find_elements(By.CLASS_NAME, "error")  # Adjust if needed
+        error_elements = driver.find_elements(By.CLASS_NAME, "error") 
         self.assertTrue(any("invalid" in el.text.lower() for el in error_elements))
 
     def tearDown(self):
